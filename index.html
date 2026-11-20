@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planify | Plataforma Inteligente para la Planificación de Viajes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Notificaciones Toast -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="#inicio" class="logo" data-nav="inicio">
+        <span class="logo-icon">✈</span>
+        <span class="logo-text">Planify</span>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+        ☰
+      </button>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="#inicio" class="nav-link active" data-nav="inicio">Inicio</a>
+        <a href="#explorar" class="nav-link" data-nav="explorar">Explorar destinos</a>
+        <a href="#favoritos" class="nav-link" data-nav="favoritos">
+          Favoritos <span class="badge" id="fav-count">0</span>
+        </a>
+        <a href="#itinerario" class="nav-link" data-nav="itinerario">
+          Mi itinerario <span class="badge" id="trip-count">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- SECCIÓN 1: INICIO (HERO + DESTACADOS + INFO) -->
+    <section id="inicio" class="view-section active">
+      <div class="hero">
+        <div class="container hero-grid">
+          <div class="hero-text">
+            <span class="pill">Explora • Consulta el clima • Organiza</span>
+            <h1>Planifica tu próximo viaje en un solo lugar</h1>
+            <p>
+              Descubre países, consulta condiciones meteorológicas en tiempo real y arma tu itinerario personalizado sin saltar entre decenas de pestañas.
+            </p>
+            <form id="hero-search-form" class="hero-search">
+              <input
+                type="text"
+                id="hero-search-input"
+                placeholder="Ej. España, Japón, Colombia, Canadá..."
+                aria-label="Buscar destino desde inicio"
+              />
+              <button type="submit" class="btn btn-primary">Buscar destino</button>
+            </form>
+            <div class="hero-cta">
+              <button type="button" class="btn btn-secondary" data-nav="explorar">Explorar todos los países</button>
+              <button type="button" class="btn btn-outline" data-nav="itinerario">Crear itinerario</button>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="preview-weather">
+              <div class="preview-header">
+                <span>Madrid, España</span>
+                <span class="tag-live">Datos en vivo</span>
+              </div>
+              <div class="preview-temp">24°C</div>
+              <p class="preview-desc">Ideal para recorrer el centro histórico y museos.</p>
+              <div class="preview-stats">
+                <div><strong>Viento</strong><span>12 km/h</span></div>
+                <div><strong>Lluvia</strong><span>10%</span></div>
+                <div><strong>Días</strong><span>3 planificados</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Destinos Destacados -->
+      <div class="container section-block">
+        <div class="section-header">
+          <div>
+            <h2>Destinos destacados</h2>
+            <p>Lugares populares listos para explorar su cultura y pronóstico climático.</p>
+          </div>
+          <button class="btn btn-outline" data-nav="explorar">Ver catálogo completo →</button>
+        </div>
+        <div id="featured-grid" class="cards-grid"></div>
+      </div>
+
+      <!-- Explicación de la Plataforma -->
+      <div class="info-band">
+        <div class="container">
+          <div class="section-header center">
+            <h2>¿Cómo funciona Planify?</h2>
+            <p>Centralizamos datos geográficos y meteorológicos abiertos para simplificar tu viaje.</p>
+          </div>
+          <div class="steps-grid">
+            <article class="step-card">
+              <div class="step-num">01</div>
+              <h3>Explora países</h3>
+              <p>Filtra por continente, revisa idiomas, moneda, capital y población desde REST Countries.</p>
+            </article>
+            <article class="step-card">
+              <div class="step-num">02</div>
+              <h3>Verifica el clima</h3>
+              <p>Obtén coordenadas con OpenStreetMap y consulta el pronóstico de varios días con Open-Meteo.</p>
+            </article>
+            <article class="step-card">
+              <div class="step-num">03</div>
+              <h3>Guarda y planifica</h3>
+              <p>Almacena tus favoritos y construye itinerarios día por día guardados localmente en tu navegador.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: EXPLORADOR DE DESTINOS -->
+    <section id="explorar" class="view-section">
+      <div class="container section-block">
+        <div class="section-header">
+          <div>
+            <h2>Explorador de destinos</h2>
+            <p>Busca por nombre o capital y filtra por región geográfica.</p>
+          </div>
+        </div>
+
+        <div class="filters-bar">
+          <div class="search-box">
+            <input
+              type="search"
+              id="explore-search"
+              placeholder="Buscar país o capital..."
+              aria-label="Buscar país o capital"
+            />
+          </div>
+          <div class="region-filters" role="group" aria-label="Filtrar por región">
+            <button class="filter-chip active" data-region="all">Todos</button>
+            <button class="filter-chip" data-region="Americas">América</button>
+            <button class="filter-chip" data-region="Europe">Europa</button>
+            <button class="filter-chip" data-region="Asia">Asia</button>
+            <button class="filter-chip" data-region="Africa">África</button>
+            <button class="filter-chip" data-region="Oceania">Oceanía</button>
+          </div>
+        </div>
+
+        <div id="explore-status" class="status-message"></div>
+        <div id="countries-grid" class="cards-grid"></div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: DETALLE DEL DESTINO + MÓDULO DEL CLIMA -->
+    <section id="detalle" class="view-section">
+      <div class="container section-block">
+        <button class="btn btn-outline mb-2" id="btn-back-explore">← Volver a explorar</button>
+        <div id="detail-container"></div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: SISTEMA DE FAVORITOS -->
+    <section id="favoritos" class="view-section">
+      <div class="container section-block">
+        <div class="section-header">
+          <div>
+            <h2>Mis destinos favoritos</h2>
+            <p>Destinos guardados en tu navegador mediante LocalStorage.</p>
+          </div>
+          <button class="btn btn-outline btn-danger-outline" id="btn-clear-favorites">Vaciar favoritos</button>
+        </div>
+        <div id="favorites-grid" class="cards-grid"></div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5: PLANIFICADOR E ITINERARIO -->
+    <section id="itinerario" class="view-section">
+      <div class="container section-block">
+        <div class="section-header">
+          <div>
+            <h2>Planificador de viaje e itinerario</h2>
+            <p>Crea tu plan de viaje, valida fechas y organiza actividades día por día.</p>
+          </div>
+        </div>
+
+        <div class="planner-layout">
+          <!-- Formulario de Planificación -->
+          <div class="card-panel">
+            <h3>Nuevo plan de viaje</h3>
+            <form id="trip-form" novalidate>
+              <div class="form-group">
+                <label for="trip-name">Nombre del viaje *</label>
+                <input type="text" id="trip-name" placeholder="Ej. Mi viaje a España" required />
+                <small class="error-msg" id="err-trip-name"></small>
+              </div>
+
+              <div class="form-group">
+                <label for="trip-destination">Destino *</label>
+                <input type="text" id="trip-destination" list="countries-datalist" placeholder="Ej. España - Madrid" required />
+                <datalist id="countries-datalist"></datalist>
+                <small class="error-msg" id="err-trip-destination"></small>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="trip-start">Fecha de inicio *</label>
+                  <input type="date" id="trip-start" required />
+                  <small class="error-msg" id="err-trip-start"></small>
+                </div>
+                <div class="form-group">
+                  <label for="trip-end">Fecha de finalización *</label>
+                  <input type="date" id="trip-end" required />
+                  <small class="error-msg" id="err-trip-end"></small>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="trip-travelers">Número de viajeros *</label>
+                  <input type="number" id="trip-travelers" min="1" max="50" value="1" required />
+                  <small class="error-msg" id="err-trip-travelers"></small>
+                </div>
+                <div class="form-group">
+                  <label for="trip-budget">Presupuesto estimado (USD) *</label>
+                  <input type="number" id="trip-budget" min="1" step="any" placeholder="Ej. 1500" required />
+                  <small class="error-msg" id="err-trip-budget"></small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="trip-notes">Comentarios o notas generales</label>
+                <textarea id="trip-notes" rows="3" placeholder="Preferencias de alojamiento, vuelos, recomendaciones..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">Guardar plan de viaje</button>
+            </form>
+          </div>
+
+          <!-- Lista de Itinerarios Guardados -->
+          <div class="trips-list-panel">
+            <h3>Mis itinerarios guardados</h3>
+            <div id="trips-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <div class="logo">
+          <span class="logo-icon">✈</span>
+          <span class="logo-text">Planify</span>
+        </div>
+        <p>Plataforma Inteligente para la Planificación de Viajes. Proyecto Frontend con datos abiertos.</p>
+      </div>
+      <div class="footer-links">
+        <span>APIs integradas:</span>
+        <a href="https://restcountries.com/" target="_blank" rel="noopener">REST Countries</a>
+        <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+        <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap Nominatim</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
